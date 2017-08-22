@@ -46,6 +46,7 @@ if __name__ == "__main__":
     print(a)
 
     print("# 常用算数与矩阵运算运算符")
+    a = np.arange(1, 5).reshape(2, 2)
     print(a.sum())
     print(a.min())
     print(a.max())

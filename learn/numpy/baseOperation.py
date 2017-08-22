@@ -1,6 +1,6 @@
 # coding=utf-8
 import numpy as np
-
+import time
 if __name__ == "__main__":
 
     print("###ndarray基本属性#####")
@@ -155,7 +155,18 @@ if __name__ == "__main__":
     print("# 读写csv文件, 并处理缺失值")
     data = np.genfromtxt('resources/dataWithNaN.csv', delimiter=',', names=True)
     print(data)
+    np.savetxt('resources/dataWrittenByNumpy', data)
 
+    # print("# 改变numpy默认的行向量为列向量模式，加快向量复制操作")
+    # a = np.asfortranarray(np.random.rand(5000, 5000, 3))
+    # tic = time.time()
+    # a[:, :, 0] = a[:, :, 1]
+    # a[:, :, 2] = a[:, :, 0]
+    # a[:, :, 1] = a[:, :, 2]
+    # toc = time.time() - tic
+    # print(toc)
 
+    a = np.array([1,2,3])
+    print(np.square(a.reshape(3, 1)))
 
 

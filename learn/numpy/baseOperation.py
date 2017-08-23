@@ -167,7 +167,8 @@ if __name__ == "__main__":
     # toc = time.time() - tic
     # print(toc)
 
-    a = np.array([1,2,3])
-    print(np.square(a.reshape(3, 1)))
+    a = np.arange(36).reshape(6, 6)
+
+    print(a[2:5:2,:])
 
 

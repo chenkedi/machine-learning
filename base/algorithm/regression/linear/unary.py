@@ -19,10 +19,10 @@ if __name__ == "__main__":
     x = data1['x']
     y = data1['y']
     m = y.shape[0]
-    # 给训练的变量加一列1，作为theta0的乘数，方便矩阵运算
-    x = np.mat([np.ones(m), x])
-    y = np.mat(y).transpose()
-    theta = np.mat(np.zeros(x.shape[0])).transpose()
+    # 给训练的变量加一行1，作为theta0的乘数，方便矩阵运算
+    x = np.row_stack((np.ones(m), x))
+    # print(x)
+    theta = np.zeros(x.shape[0])
 
     print("初始cost值: ", str(func.compute_cost(x, y, theta)))
 

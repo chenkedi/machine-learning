@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 from base.algorithm.regression.linear import func
 
@@ -12,9 +13,6 @@ if __name__ == "__main__":
     print("读取示例数据....")
 
     data1 = pd.read_csv('resources/data1.txt', header=None, names=['x', 'y'])
-
-    print("绘制一维数据的散点图...")
-    sns.jointplot(x='x', y='y', data=data1)
 
     x = data1['x']
     y = data1['y']
@@ -28,5 +26,17 @@ if __name__ == "__main__":
 
     print("开始进行梯度下降...")
     theta = func.gradient_decent(x, y, theta)
+
+    print('最终拟合图：')
+    plt.plot(x, y, 'b*')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('unary linear regression')
+    plt.grid(True)
+    plt.plot(x[1, :], x.T.dot(theta))
+    plt.legend(['First', 'second'], loc=2)
+    sns.plt.show()
+
+
 
 

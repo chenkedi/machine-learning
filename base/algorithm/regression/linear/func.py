@@ -41,5 +41,5 @@ def normalize_feature(x):
     :param x: (n-1) * m
     :return x: (n-1) * m
     """
-    mean = np.apply_along_axis(np.std, axis=1, arr=x).reshape(2, 1)
-    return (x - mean) / mean
+    mean = np.apply_along_axis(np.mean, axis=1, arr=x).reshape(2, 1)
+    return np.abs((x - mean)) / mean

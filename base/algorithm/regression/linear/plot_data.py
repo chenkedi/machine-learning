@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
     sns.jointplot(x='x', y='y', data=data1)
     sns.jointplot(x='x', y='y', data=data2)
+    sns.plot([1,2,3,4])
     sns.plt.show()
 
 

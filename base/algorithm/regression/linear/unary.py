@@ -28,7 +28,7 @@ if __name__ == "__main__":
     theta = func.gradient_decent(x, y, theta)
 
     print('最终拟合图：')
-    plt.plot(x, y, 'b*')
+    plt.plot(x[1, :], y, 'r*')
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('unary linear regression')

@@ -46,6 +46,6 @@ if __name__ == "__main__":
     ax.plot_surface(X, Y, f(X, Y), rstride=1, cstride=1)
     ax.scatter(x[1, :], x[2, :], y, marker='*', color='r')
     ax.view_init(elev=30, azim=125)
-    plt.show()
+    sns.plt.show()
 
 

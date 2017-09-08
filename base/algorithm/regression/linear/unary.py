@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from base.algorithm.regression.linear import func
+import func
 
 
 if __name__ == "__main__":

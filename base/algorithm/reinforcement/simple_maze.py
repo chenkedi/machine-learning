@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import time
 
-np.random.seed(2)
+np.random.seed(1)
 init_states = 6
 actions = ['left', 'right']
 epsilon = 0.9
@@ -24,8 +24,14 @@ def build_q_table(init_states, actions):
 
 
 def choose_action(state, q_table):
+    """
+    基于epsilon贪心的策略Pi
+    :param state:
+    :param q_table:
+    :return:
+    """
     state_actions = q_table.iloc[state, :]
-    if(np.random.uniform() > gamma) or (state_actions.all() == 0):
+    if (np.random.uniform() > epsilon) or (state_actions.all() == 0):
         action_name = np.random.choice(actions)
     else:
         action_name = state_actions.argmax()
@@ -34,30 +40,31 @@ def choose_action(state, q_table):
 
 def get_env_feedback(S, A):
     if A == 'right':
-        if S == init_states - 2:
+        if S == init_states - 2:  # 当当前选择的动作为向右，且当前位置为终点的前一个点，则转以后的状态S_为terminal
             S_ = 'terminal'
-            R = 1
+            R = 1  # 到达终点reward为1
         else:
-            S_ = S + 1
+            S_ = S + 1  # 如果位置不是倒数第一个，则位置加一
             R = 0
     else:
-        R = 0
-        if S == 0:
+        R = 0  # 向左走reward都为0
+        if S == 0:  # 本身处于第0个位置，向左走还是在这个位置
             S_ = S
         else:
-            S_ = S - 1
+            S_ = S - 1  # 否则位置减一
     return S_, R
+
 
 def update_env(S, episode, step_counter):
     # This is how environment be updated
-    env_list = ['-']*(init_states-1) + ['T']   # '---------T' our environment
+    env_list = ['-'] * (init_states - 1) + ['T']  # '---------T' our environment
     # S对应环境env_list的索引，范围为0-4，如果为terminal，则表示到达目标
     if S == 'terminal':
-        interaction = 'Episode %s: total_steps = %s' % (episode+1, step_counter)
+        interaction = 'Episode %s: total_steps = %s' % (episode + 1, step_counter)
         print('\r{}'.format(interaction), end='')
         time.sleep(gap_time)
         print('\r                               ', end='')  # 这里是抹除当前打印行的信息
-    else:
+    else:  # 如果没到终点，则打印出根据Q值选择的策略在环境中得到的状态
         env_list[S] = 'o'
         interaction = ''.join(env_list)
         print('\r{}'.format(interaction), end='')
@@ -73,9 +80,9 @@ def reinforcement_learning():
         is_terminated = False
         update_env(S, iter, step_counter)
         while not is_terminated:
-            A = choose_action(S, q_table)
-            S_, R = get_env_feedback(S, A)
-            q_predict = q_table.ix[S, A]  # 注意这里是S，不是_
+            A = choose_action(S, q_table)  # 使用epsilon贪心策略选择动作
+            S_, R = get_env_feedback(S, A)  # 根据选择的动作和当前所处的状态获得环境的反馈，得到奖励和下一个状态
+            q_predict = q_table.ix[S, A] # 获得上一个状态和所选择动作的Q值
             if S_ != 'terminal':
                 q_target = R + gamma * q_table.iloc[S_, :].max()
             else:
@@ -90,9 +97,7 @@ def reinforcement_learning():
     return q_table
 
 
-
 if __name__ == "__main__":
     q_table = reinforcement_learning()
     print('\r\nQ-table:\n')
     print(q_table)
-

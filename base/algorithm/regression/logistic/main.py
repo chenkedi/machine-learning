@@ -60,7 +60,6 @@ d = model.model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations
 costs = np.squeeze(d['costs'])
 plt.plot(costs)
 plt.ylabel('cost')
-plt.xlabel('iterations (per hundreds)')
 plt.title("Learning rate =" + str(d["learning_rate"]))
 plt.show()
 

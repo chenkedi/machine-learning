@@ -2,3 +2,6 @@
 project/
 __pycache__
 .ipynb_checkpoints/
+learn/cousera/course4/week2/resnet/ResNet50.h5
+learn/cousera/course4/week3/car_detection_for_autonomous_driving/model_data/yolo.h5
+learn/cousera/course4/week4/neural_style_transfer/pretrained-model/imagenet-vgg-verydeep-19.mat

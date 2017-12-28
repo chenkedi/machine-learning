@@ -2,7 +2,8 @@
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
+#import seaborn as sns
+import matplotlib
 import matplotlib.pyplot as plt
 
 import func
@@ -35,8 +36,4 @@ if __name__ == "__main__":
     plt.grid(True)
     plt.plot(x[1, :], x.T.dot(theta))
     plt.legend(['First', 'second'], loc=2)
-    sns.plt.show()
-
-
-
-
+    plt.show()

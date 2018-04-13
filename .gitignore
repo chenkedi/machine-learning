@@ -4,3 +4,7 @@ __pycache__
 learn/cousera/course4/week2/resnet/ResNet50.h5
 learn/cousera/course4/week3/car_detection_for_autonomous_driving/model_data/yolo.h5
 learn/cousera/course4/week4/neural_style_transfer/pretrained-model/imagenet-vgg-verydeep-19.mat
+learn/cousera/course5/week2/Emojify/data/glove.6B.50d.txt
+learn/cousera/course5/week3/Trigger word detection/XY_dev/X_dev.npy
+learn/cousera/course5/week3/Trigger word detection/XY_train/X.npy
+learn/cousera/course5/week2/Word Vector Representation/data/glove.6B.50d.txt

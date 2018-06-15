@@ -1,0 +1,24 @@
+[
+    {
+        "vehicle_type_ID": "1",
+        "vehicle_type_name": "IVECO",
+        "max_volume": "12",
+        "max_weight": "2",
+        "vehicle_cnt": "unlimited",
+        "driving_range": "100000",
+        "charge_tm": "0.5",
+        "unit_trans_cost": "12",
+        "vehicle_cost": "200"
+    },
+    {
+        "vehicle_type_ID": "2",
+        "vehicle_type_name": "TRUCK",
+        "max_volume": "16",
+        "max_weight": "2.5",
+        "vehicle_cnt": "unlimited",
+        "driving_range": "120000",
+        "charge_tm": "0.5",
+        "unit_trans_cost": "14",
+        "vehicle_cost": "300"
+    }
+]

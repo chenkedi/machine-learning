@@ -52,7 +52,7 @@ def totalCostCheck(row):
     return dc.Decimal(row["trans_cost"] + row["charge_cost"] + row["wait_cost"] + row["fixed_use_cost"], dc.getcontext()).__round__(2) \
            == dc.Decimal(row["total_cost"], dc.getcontext()).__round__(2)
 
-dir = "try_1"
+dir = "try_2"
 path = "raw_data/results/%s/Result.csv" % dir
 
 chargeCost = 50

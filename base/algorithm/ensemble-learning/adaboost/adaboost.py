@@ -4,7 +4,7 @@ import boost
 
 def loadSimpleData():
     """
-    返回一个测试算法基本正确性的特征数据矩阵
+    返回一个基本的训练数据矩阵和标签矩阵
     :return:
     """
     dataMat = matrix([[1., 2.1],

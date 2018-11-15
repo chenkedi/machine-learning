@@ -1,17 +1,36 @@
-from threading import Thread, Lock
-from urllib import request, parse
-from bs4 import BeautifulSoup
-from re import compile
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2018/11/15 下午4:40
+# @Author  : chenkedi
+# @Email   : chenkedi@baidu.com
+"""
+Copyright 2018 Baidu, Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+"""
+
+import threading
+import os
+import re
 import logging
 
+from urllib import request, parse
+from bs4 import BeautifulSoup
 
-class CrawlerThread(Thread):
+
+class CrawlerThread(threading.Thread):
     """
     定义"抓取"和"存储"指定URL过程的线程
     以便使用多线程对IO密集型任务加速
     """
-    threadLock = Lock()
-    logging.getLogger('crawler_test')
+    threadLock = threading.Lock()
 
     def __init__(self, url, tid, url_queue, visited_url, target_url_pattern, filepath=None, mode='save'):
         """
@@ -45,15 +64,16 @@ class CrawlerThread(Thread):
         try:
             logging.info(f'Thread {self.tid} is retrieving {self.url} .....')
             filname = self.file_name_fix(self.url)
+            if not os.path.exists(self.filepath):
+                os.makedirs(self.filepath)
             request.urlretrieve(self.url, f'{self.filepath}/{filname}')
         except Exception as e:
             logging.error(f'Thread {self.tid} retrieving {self.url} failed for {e}')
             exit()
         else:
             # 记录已访问的set为多线程共享，需进行同步
-            CrawlerThread.threadLock.acquire()
-            self.visited_url.add(self.url)
-            CrawlerThread.threadLock.release()
+            with CrawlerThread.threadLock:
+                self.visited_url.add(self.url)
 
     def _extract_new_url(self):
         try:
@@ -62,12 +82,10 @@ class CrawlerThread(Thread):
             bsobj = BeautifulSoup(html.read(), "lxml")
         except Exception as e:
             logging.error(f'Thread {self.tid} parsing {self.url} failed for {e}')
-            exit()
         else:
             # 记录已访问的set为多线程共享，需进行同步
-            CrawlerThread.threadLock.acquire()
-            self.visited_url.add(self.url)
-            CrawlerThread.threadLock.release()
+            with CrawlerThread.threadLock:
+                self.visited_url.add(self.url)
 
             # 获取当前网页源码中所有具有src属性和href属性的标签,并将其中的链接加入到new_url_list集合
             new_url_list = set()
@@ -85,17 +103,17 @@ class CrawlerThread(Thread):
             logging.info(f'Thread {self.tid} is adding all links of {self.url} to url queue')
 
             # 对多个线程需要并发写入的url队列加锁同步
-            CrawlerThread.threadLock.acquire()
-            self.url_queue.extend(new_url_list)
-            CrawlerThread.threadLock.release()
+            with CrawlerThread.threadLock:
+                self.url_queue.extend(new_url_list)
+
             logging.info(
                 f'After Thread {self.tid} added all links of {self.url}, url queue length is {len(self.url_queue)}')
 
     def url_filter(self, url):
         """
         在进行url扩增时，决定哪些url会加入url_queue(站点内链，包含绝对链接与相对链接，或者符合url_pattern的才能加入url_queue)
-        :param url:
-        :return:
+        :param url: 需要进行判定的url
+        :return: boolean，表示是否符合加入url_queue的条件
         """
 
         # 对于符合下载pattern的页面，无论是否为外链，均需加入url队列
@@ -112,6 +130,11 @@ class CrawlerThread(Thread):
         return True
 
     def url_fix(self, url):
+        """
+        修正网页中的相对链接及其他形式不规范的连接
+        :param url: 需要进行修正的url
+        :return: str 修正后的url
+        """
 
         if url.startswith('http://') or url.startswith('https://'):
             url_fixed = url
@@ -130,17 +153,17 @@ class CrawlerThread(Thread):
     def file_name_fix(self, filename):
         """
         处理以url为文件名存储文件时的路径问题
-        :param filename:
-        :return:
+        :param filename: 需要进行修正的文件名
+        :return: str 修正后的文件名
         """
-        return filename.replace('/', '-')
+        return re.sub(r"[\/\\\:\*\?\"\<\>\|]", "-", filename)
 
     @staticmethod
     def check_target_url(pattern, url):
         """
         检测url是否为配置文件指定pattern的 url
-        :param url:
+        :param pattern: 由配置文件中提供的url正则匹配模板
+        :param url: 需要进行匹配
         :return: boolean
         """
-        reg = compile(pattern)
-        return reg.match(url)
+        return re.match(pattern, url)

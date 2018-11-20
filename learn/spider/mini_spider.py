@@ -20,7 +20,6 @@ import os
 import sys
 import argparse
 import logging
-import multiprocessing
 import time
 
 import crawler_thread
@@ -180,7 +179,6 @@ class MiniSpider:
         # process_pool.join()
         # logging.info(f'All subprocess of top level seeds complete')
         self.traverse_seed(self.seeds)
-
 
 
 if __name__ == '__main__':

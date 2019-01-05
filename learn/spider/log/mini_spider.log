@@ -1,0 +1,10 @@
+INFO: 01-05 22:31:49: mini_spider.py:66 * 140735782024000 current depth is 1
+INFO: 01-05 22:31:49: mini_spider.py:68 * 140735782024000 =======url queue length before extend: 2
+INFO: 01-05 22:31:49: crawler_thread.py:80 * 123145481441280 Thread 0 is parsing https://www.che168.com/beijing .....
+INFO: 01-05 22:31:52: mini_spider.py:82 * 140735782024000 =======url queue length after extend: 1
+INFO: 01-05 22:31:52: crawler_thread.py:80 * 123145488306176 Thread 0 is parsing https://news.baidu.com .....
+INFO: 01-05 22:31:54: mini_spider.py:82 * 140735782024000 =======url queue length after extend: 0
+INFO: 01-05 22:31:55: crawler_thread.py:103 * 123145488306176 Thread 0 is adding all links of https://news.baidu.com to url queue
+INFO: 01-05 22:31:55: crawler_thread.py:110 * 123145488306176 After Thread 0 added all links of https://news.baidu.com, url queue length is 22
+INFO: 01-05 22:31:56: crawler_thread.py:103 * 123145481441280 Thread 0 is adding all links of https://www.che168.com/beijing to url queue
+INFO: 01-05 22:31:56: crawler_thread.py:110 * 123145481441280 After Thread 0 added all links of https://www.che168.com/beijing, url queue length is 674

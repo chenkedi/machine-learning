@@ -6,7 +6,6 @@
 
 import numpy as np
 import math
-import logging
 import time
 from collections import defaultdict
 from operator import itemgetter
@@ -51,17 +50,17 @@ class UserCF:
         rank = dict()
         u_items = self.train_set[u]
         for v, wuv in sorted(self.W[u].items(), key=itemgetter(1), reverse=True)[0:self.K]:
-            for item, rvi in self.train_set[v].items():
+            for item in self.train_set[v].keys():
                 # 寻找K个最相似的用户v的物品列表中，不在用户u中的物品进行推荐评分
                 if item in u_items:
                     continue
-                else:
-                    # 将K个候选推荐用户v中，不在u的物品列表中的物品，进行累加评分（因为不同的v有可能有共同的物品i，这些得分需要累加）
-                    # 对于每个相似用户v，预测u对其物品列表中物品i的感兴趣度为：Wuv * rvi
-                    # 由于有K个相似用户v，所以u对某个一i的感兴趣程度的得分需要累加多个物品列表中有物品i的用户v的得分，所以这里的rank[item]后面是+=
-                    # rank[item] += wuv * rvi
-                    # 原文假设用的是隐性反馈数据，所以rvi都等于1
-                    rank[item] += wuv
+                # 将K个候选推荐用户v中，不在u的物品列表中的物品，进行累加评分（因为不同的v有可能有共同的物品i，这些得分需要累加）
+                # 对于每个相似用户v，预测u对其物品列表中物品i的感兴趣度为：Wuv * rvi
+                # 由于有K个相似用户v，所以u对某个一i的感兴趣程度的得分需要累加多个物品列表中有物品i的用户v的得分，所以这里的rank[item]后面是+=
+                # rank[item] += wuv * rvi
+                # 原文假设用的是隐性反馈数据，所以rvi都等于1
+                rank.setdefault(item, 0)
+                rank[item] += wuv
         return dict(sorted(rank.items(), key=itemgetter(1), reverse=True)[0:N])
 
     def recommands(self, users, N):
@@ -170,7 +169,8 @@ class UserCF:
 
 if __name__ == '__main__':
     import util.movielen_reader as mr
-    movielens_train, movie_lens_test = mr.read_ratings("../data/ml-1m/ratings.dat", pivot=0.2)
+    movielens_train, movie_lens_test = mr.read_ratings("../data/ml-1m/ratings.dat", pivot=0.1)
 
-    ucf = UserCF(movielens_train, sim_type='normal')
+    ucf = UserCF(movielens_train, sim_type='IIF')
     ucf.train_model()
+    print(ucf.recommand('10' , 10))

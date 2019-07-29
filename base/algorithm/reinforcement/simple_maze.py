@@ -31,7 +31,7 @@ def choose_action(state, q_table):
     :return:
     """
     state_actions = q_table.iloc[state, :]
-    if (np.random.uniform() > epsilon) or (state_actions.all() == 0):
+    if (np.random.uniform() > epsilon) or (state_actions.multi_thread_retriver() == 0):
         action_name = np.random.choice(actions)
     else:
         action_name = state_actions.argmax()
